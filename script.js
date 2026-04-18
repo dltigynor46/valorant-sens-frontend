@@ -1,6 +1,3 @@
-const apiBase = 'https://valorant-sens-backend-production.up.railway.app';
-
-// List of some Valorant pro players for random suggestions
 const proPlayers = [
   { name: 'TenZ', dpi: 800, sens: 0.408 },
   { name: 'Asuna', dpi: 800, sens: 0.495 },
@@ -9,9 +6,12 @@ const proPlayers = [
   { name: 'Derke', dpi: 800, sens: 0.46 }
 ];
 
+// Constants for Valorant calculations
+const VALORANT_YAW = 0.07;
+const INCH_TO_CM = 2.54;
+
 let history = [];
 
-// Load history from localStorage
 function loadHistory() {
   const stored = localStorage.getItem('valorantSensHistory');
   if (stored) {
@@ -24,14 +24,12 @@ function loadHistory() {
   updateHistoryUI();
 }
 
-// Save new record to history and persist
 function saveToHistory(record) {
   history.push(record);
   localStorage.setItem('valorantSensHistory', JSON.stringify(history));
   updateHistoryUI();
 }
 
-// Update the history section in the UI
 function updateHistoryUI() {
   const historySection = document.getElementById('history');
   const listEl = document.getElementById('historyList');
@@ -48,18 +46,16 @@ function updateHistoryUI() {
   });
 }
 
-// Display a random pro player's settings
 function showRandomPro() {
   const proSection = document.getElementById('proSens');
   const pro = proPlayers[Math.floor(Math.random() * proPlayers.length)];
   document.getElementById('proName').textContent = pro.name;
   document.getElementById('proDPI').textContent = pro.dpi;
-  // Note: the HTML has a typo on the ID: proSensitvity
+  // Note: HTML has a typo 'proSensitvity' for the sensitivity field
   document.getElementById('proSensitvity').textContent = pro.sens;
   proSection.classList.remove('hidden');
 }
 
-// Copy share link to clipboard and show notification
 function copyShareLink(dpi, sensitivity) {
   const shareSection = document.getElementById('share');
   const copiedSpan = document.getElementById('shareCopied');
@@ -73,52 +69,42 @@ function copyShareLink(dpi, sensitivity) {
   shareSection.classList.remove('hidden');
 }
 
-async function calculate() {
-  const dpi = parseInt(document.getElementById('dpi').value, 10);
+function calculate() {
+  const dpi = parseFloat(document.getElementById('dpi').value);
   const sensitivity = parseFloat(document.getElementById('sensitivity').value);
   if (isNaN(dpi) || isNaN(sensitivity)) {
     alert('Please enter valid numbers for DPI and sensitivity.');
     return;
   }
-  const payload = { dpi, sensitivity };
-  try {
-    const response = await fetch(`${apiBase}/api/v1/calculator/sens`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-    if (!response.ok) {
-      throw new Error('API response error');
-    }
-    const data = await response.json();
-    // Update results UI
-    document.getElementById('edpi').textContent = data.edpi;
-    document.getElementById('cm360').textContent = data.cm360;
-    document.getElementById('psaLow').textContent = data.psa_low;
-    document.getElementById('psaAverage').textContent = data.psa_average;
-    document.getElementById('psaHigh').textContent = data.psa_high;
-    document.getElementById('results').classList.remove('hidden');
-    // Record timestamp
-    const now = new Date().toLocaleString('ko-KR');
-    // Save to history
-    saveToHistory({
-      time: now,
-      dpi,
-      sensitivity,
-      edpi: data.edpi,
-      cm360: data.cm360
-    });
-    // Prepare share link and reveal share section
-    copyShareLink(dpi, sensitivity);
-  } catch (err) {
-    alert('An error occurred while calculating. Please try again later.');
-    console.error(err);
-  }
+  // Compute eDPI and other metrics locally
+  const edpi = dpi * sensitivity;
+  const cm360 = (360 / (dpi * sensitivity * VALORANT_YAW)) * INCH_TO_CM;
+  const psaLow = sensitivity * 0.8;
+  const psaHigh = sensitivity * 1.2;
+  const psaAverage = (psaLow + psaHigh) / 2;
+
+  // Update result elements
+  document.getElementById('edpi').textContent = edpi.toFixed(2);
+  document.getElementById('cm360').textContent = cm360.toFixed(2);
+  document.getElementById('psaLow').textContent = psaLow.toFixed(3);
+  document.getElementById('psaAverage').textContent = psaAverage.toFixed(3);
+  document.getElementById('psaHigh').textContent = psaHigh.toFixed(3);
+  document.getElementById('results').classList.remove('hidden');
+
+  // Save to history with timestamp
+  const now = new Date().toLocaleString('ko-KR');
+  saveToHistory({
+    time: now,
+    dpi,
+    sensitivity,
+    edpi: parseFloat(edpi.toFixed(2)),
+    cm360: parseFloat(cm360.toFixed(2))
+  });
+
+  // Prepare share link
+  copyShareLink(dpi, sensitivity);
 }
 
-// Parse query parameters and auto-calculate if provided
 function initFromParams() {
   const params = new URLSearchParams(window.location.search);
   const dpiParam = params.get('dpi');
@@ -130,7 +116,6 @@ function initFromParams() {
   }
 }
 
-// Attach event listeners
 document.getElementById('calculateBtn').addEventListener('click', calculate);
 document.getElementById('randomProBtn').addEventListener('click', showRandomPro);
 document.getElementById('shareBtn').addEventListener('click', () => {
@@ -139,6 +124,5 @@ document.getElementById('shareBtn').addEventListener('click', () => {
   copyShareLink(dpi, sensitivity);
 });
 
-// Initialize on load
 loadHistory();
 initFromParams();
