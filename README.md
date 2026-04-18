@@ -1,44 +1,36 @@
 # Valorant Sensitivity Calculator Frontend
 
-This repository contains the frontend web interface for the [Valorant Sensitivity Calculator API](https://valorant-sens-backend-production.up.railway.app). It allows players to calculate their effective DPI (eDPI), cm/360, and PSA (Perfect Sensitivity Approximation) values and explore recommended settings.
+This repository contains a simple web interface for calculating Valorant sensitivity metrics. Unlike earlier versions that depended on a remote API, the current implementation runs **entirely in your browser**. You can compute effective DPI (eDPI), cm/360, and Perfect Sensitivity Approximation (PSA) values without any server calls.
 
 ## Features
 
-- Simple form to enter DPI and in‑game sensitivity.
-- Fetches results from the deployed API and displays:
-  - eDPI
-  - cm/360
-  - PSA low, average and high values
-- Responsive layout with light styling.
-- Placeholder area for advertisements or promotional content.
-- "Buy me a coffee" link in the footer for donations.
+- **Local calculations** of eDPI, cm/360 and PSA low/average/high values – no backend required.
+- **Random pro recommendations**: click a button to see a professional player's DPI and sensitivity.
+- **History tracking**: your past calculations are stored in the browser and listed for quick reference.
+- **Shareable links**: generate a link with your DPI and sensitivity values encoded as query parameters.
+- **Affiliate recommendations**: section for recommended gear (e.g. a gaming mouse) with a link you can replace with your own Coupang or Amazon affiliate URL.
+- **AdSense integration**: includes a placeholder `div` and script tag for Google AdSense. Replace the `ca-pub-xxxxxxxxxxxxxxxx` and ad-slot ID with your own values.
+- **Support link**: footer includes a "Buy me a coffee" link (you can replace the URL).
 
 ## Usage
 
 1. Clone or download this repository.
-2. Open `index.html` in a web browser.
-3. Enter your DPI and sensitivity and click "Calculate" to see results.
+2. Open `index.html` in a modern web browser.
+3. Enter your DPI and sensitivity and click **Calculate** to see the results.
+4. Use the **Random Pro** button to see example settings from well-known players.
+5. Your calculation history and share link will appear under the results section.
 
-This frontend is configured to call the production API at:
+To customize adverts and affiliates:
 
-```
-const apiBase = 'https://valorant-sens-backend-production.up.railway.app';
-```
-
-If you deploy your own API instance, update the `apiBase` constant in `script.js` to point to your API URL.
+- Replace the AdSense client ID and ad slot in `index.html` with your own.
+- Replace the affiliate link in the “Recommended Gear” section with your own affiliate URL.
 
 ## Deployment
 
-This frontend can be hosted on any static hosting service, such as GitHub Pages, Vercel, Netlify, or your own web server. For example, to deploy on GitHub Pages:
+Because everything runs in the browser, you can host this site on any static hosting service (GitHub Pages, Vercel, Netlify, etc.). For GitHub Pages:
 
-1. Push the files to the main branch of the repository.
-2. In repository settings, enable GitHub Pages and select the source branch.
-3. Your site will be available at `https://<username>.github.io/<repository>`.
+1. Commit the files to the `main` branch.
+2. In your repository's **Settings → Pages**, set the source to the `main` branch and the root folder.
+3. Save the configuration and wait for the site to build.
 
-Make sure to update `apiBase` if your API is hosted at a custom domain.
-
-## Monetization
-
-This project provides a basic placeholder `<div id="ad-slot"></div>` where you can embed advertisements (e.g., via Google AdSense) or promote premium features. You can also customize the footer to include a donation link or integrate your preferred payment platform.
-
-Premium features such as saving sensitivity history, comparing against professional player settings, and generating detailed reports could be implemented by expanding the backend and adding user accounts and payments. These are not included in this demo frontend.
+Once deployed, share your GitHub Pages URL with others. Advertising revenue (AdSense) and affiliate links will be active on the public site.
