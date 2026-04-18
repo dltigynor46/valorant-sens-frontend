@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valorant Sensitivity Calculator</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx" crossorigin="anonymous"></script>
 </head>
 <body>
   <header>
@@ -18,6 +20,7 @@
       <input type="number" id="sensitivity" step="0.001" required>
       <button id="calculateBtn">Calculate</button>
     </section>
+
     <section id="results" class="hidden">
       <h2>Results</h2>
       <p>eDPI: <span id="edpi"></span></p>
@@ -26,13 +29,33 @@
       <p>PSA Average: <span id="psaAverage"></span></p>
       <p>PSA High: <span id="psaHigh"></span></p>
     </section>
+
+    <section id="proSens" class="hidden">
+      <h2>Random Pro Sensitivity</h2>
+      <p><strong>Player:</strong> <span id="proName"></span></p>
+      <p><strong>DPI:</strong> <span id="proDpi"></span></p>
+      <p><strong>Sensitivity:</strong> <span id="proSensitivity"></span></p>
+      <button id="randomProBtn">Get Random Pro</button>
+    </section>
+
+    <section id="history" class="hidden">
+      <h2>Your Calculation History</h2>
+      <ul id="historyList"></ul>
+    </section>
+
+    <section id="share" class="hidden">
+      <button id="shareBtn">Copy Share Link</button>
+      <span id="shareCopied" class="hidden">Copied!</span>
+    </section>
+
     <div id="ad-slot">
       <!-- Advertisement placeholder -->
     </div>
   </main>
+
   <footer>
     <p>Made for Valorant players. Powered by the Valorant Sens Calculator API.</p>
-    <p><a href="https://buymeacoffee.com/username">Support us</a></p>
+    <a href="https://buymeacoffee.com/username">Support us</a>
   </footer>
   <script src="script.js"></script>
 </body>
