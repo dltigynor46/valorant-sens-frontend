@@ -96,3 +96,25 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
+
+
+#affiliate {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+#affiliate h2 {
+  margin-top: 0;
+}
+
+#affiliate a {
+  color: #3489db;
+  text-decoration: none;
+}
+
+#affiliate a:hover {
+  text-decoration: underline;
+}
